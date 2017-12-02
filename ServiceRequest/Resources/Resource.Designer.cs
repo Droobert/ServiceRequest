@@ -143,9 +143,6 @@ namespace DoYourJob
 			// aapt resource value: 0x7f08000d
 			public const int AddServiceButton = 2131230733;
 			
-			// aapt resource value: 0x7f080010
-			public const int AddStaffButton = 2131230736;
-			
 			// aapt resource value: 0x7f08000b
 			public const int CreateStaffButton = 2131230731;
 			
@@ -157,9 +154,6 @@ namespace DoYourJob
 			
 			// aapt resource value: 0x7f080009
 			public const int StaffNameTextView = 2131230729;
-			
-			// aapt resource value: 0x7f08000f
-			public const int StaffRecyclerView = 2131230735;
 			
 			// aapt resource value: 0x7f080015
 			public const int dateTextDisplay = 2131230741;
@@ -182,6 +176,9 @@ namespace DoYourJob
 			// aapt resource value: 0x7f080017
 			public const int detailsTextView = 2131230743;
 			
+			// aapt resource value: 0x7f08000f
+			public const int imageView1 = 2131230735;
+			
 			// aapt resource value: 0x7f080003
 			public const int locationEditText = 2131230723;
 			
@@ -190,6 +187,9 @@ namespace DoYourJob
 			
 			// aapt resource value: 0x7f080002
 			public const int locationTextView = 2131230722;
+			
+			// aapt resource value: 0x7f080010
+			public const int myButton = 2131230736;
 			
 			// aapt resource value: 0x7f080014
 			public const int nameTextDisplay = 2131230740;
@@ -279,6 +279,9 @@ namespace DoYourJob
 			
 			// aapt resource value: 0x7f070000
 			public const int Hello = 2131165184;
+			
+			// aapt resource value: 0x7f070002
+			public const int openCamera = 2131165186;
 			
 			static String()
 			{

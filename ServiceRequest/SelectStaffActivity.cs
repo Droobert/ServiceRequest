@@ -1,11 +1,21 @@
-﻿using System.Collections.Generic;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Widget;
 using Android.Support.V7.Widget;
 using Newtonsoft.Json;
 using DoYourJob;
+using Java.IO;
+using Android.Content.PM;
+using Android.Provider;
+using Android.Net;
+using Android.Graphics;
+using System.Collections.Generic;
+using System;
+//using System.IO;
+//using Android.Graphics;
+//using System;
+//using Android.Content.PM;
 
 namespace ServiceRequest
 {
@@ -13,70 +23,115 @@ namespace ServiceRequest
     public class SelectStaffActivity : Activity
     {
         Button addStaffButton;
-        List<Staff> staffCollection;
+        Button button;
+        ImageView _imageView;
 
-        RecyclerView staffRecyclerView;
-        RecyclerView.LayoutManager staffLayoutManager;
-        StaffAdapter staffAdapter;
-        //FIXME: The staffs are all displaying The Moon as their location in the SelectStaffActivity
-        //FIXME: All of the staffs are displaying the same list of services in MainActivity. 
-            //Its always the first list of services loaded.
-        //FIXME: All of the staffs are failing to load their services from the DB in MainActivity, only the first one is loading successfully.
-
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate(savedInstanceState);
-
-            //-----------POPULATE HOUSECOLLECTION FROM DB------
-            //Create a dbHelper
-            DBHelper dbHelper = new DBHelper();
-            //Open connection to DB
-            dbHelper.OpenConn();
-            //Download list of staffs from DB
-            //While loop to debug
-            while(staffCollection == null)
-                staffCollection = dbHelper.QueryStaffs();
-            
-            
-            //-----------SET UP RECYCLERVIEW AND HELPERS------
-            //Create our Staff Adapter
-            staffAdapter = new StaffAdapter(staffCollection);
-            //Set our view
+            base.OnCreate(bundle);
             SetContentView(Resource.Layout.SelectStaff);
-            //Get our RecyclerView layout:
-            staffRecyclerView = FindViewById<RecyclerView>(Resource.Id.StaffRecyclerView);
-            // Plug the adapter into the RecyclerView:
-            staffRecyclerView.SetAdapter(staffAdapter);
-            //Set up our layout manager
-            staffLayoutManager = new LinearLayoutManager(this);
-            //Give the recycler view to our layout manager
-            staffRecyclerView.SetLayoutManager(staffLayoutManager);
 
-            //-----------BUTTONS------------------------------
-            //Attach the event for individual recyclerview items being clicked:
-            staffAdapter.ItemClick += OnItemClick;
-            //Find the button to select a staff
-            addStaffButton = FindViewById<Button>(Resource.Id.AddStaffButton);
-            //Hook up the EDP
-            addStaffButton.Click += (sender, e) =>
+            if (IsThereAnAppToTakePictures())
             {
-                //Bring up the Add Staff menu
-                var intent = new Intent(this, typeof(AddStaffActivity));
-                StartActivity(intent);
-            };
+                CreateDirectoryForPictures();
 
-            void OnItemClick(object sender, int position)
-            {
-                //When a staff is clicked, it should either be highlighted with a radio button syle,
-                //or immediately chosen as the staff and we return back to main activity with currentUser
-                //For now lets go with immediately chosen as currentUser
-                //STYLE POINTS: I kinda want a radio buttons feel for this.
-                var mainIntent = new Intent(this, typeof(MainActivity));
-                mainIntent.PutExtra("currentUser", JsonConvert.SerializeObject(staffCollection[position]));
-               // mainIntent.PutExtra("staffCollection", JsonConvert.SerializeObject(staffCollection));
-
-                StartActivity(mainIntent);
+                Button button = FindViewById<Button>(Resource.Id.myButton);
+                _imageView = FindViewById<ImageView>(Resource.Id.imageView1);
+                button.Click += TakeAPicture;
             }
         }
+
+        private void CreateDirectoryForPictures()
+        {
+            App._dir = new File(
+                Android.OS.Environment.GetExternalStoragePublicDirectory(
+                    Android.OS.Environment.DirectoryPictures), "CameraAppDemo");
+            if (!App._dir.Exists())
+            {
+                App._dir.Mkdirs();
+            }
+        }
+
+        private bool IsThereAnAppToTakePictures()
+        {
+            Intent intent = new Intent(MediaStore.ActionImageCapture);
+            IList<ResolveInfo> availableActivities =
+                PackageManager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+            return availableActivities != null && availableActivities.Count > 0;
+        }
+
+        private void TakeAPicture(object sender, EventArgs eventArgs)
+        {
+            Intent intent = new Intent(MediaStore.ActionImageCapture);
+            App._file = new File(App._dir, String.Format("myPhoto_{0}.jpg", Guid.NewGuid()));
+            intent.PutExtra(MediaStore.ExtraOutput, Android.Net.Uri.FromFile(App._file));
+            StartActivityForResult(intent, 0);
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+
+            // Make it available in the gallery
+
+            Intent mediaScanIntent = new Intent(Intent.ActionMediaScannerScanFile);
+            Android.Net.Uri contentUri = Android.Net.Uri.FromFile(App._file);
+            mediaScanIntent.SetData(contentUri);
+            SendBroadcast(mediaScanIntent);
+
+            // Display in ImageView. We will resize the bitmap to fit the display.
+            // Loading the full sized image will consume to much memory
+            // and cause the application to crash.
+
+            int height = Resources.DisplayMetrics.HeightPixels;
+            int width = _imageView.Height;
+            App.bitmap = App._file.Path.LoadAndResizeBitmap(width, height);
+            if (App.bitmap != null)
+            {
+                _imageView.SetImageBitmap(App.bitmap);
+                App.bitmap = null;
+            }
+
+            // Dispose of the Java side bitmap.
+            GC.Collect();
+        }
     }
+
+    public static class BitmapHelpers
+    {
+        public static Bitmap LoadAndResizeBitmap(this string fileName, int width, int height)
+        {
+            // First we get the the dimensions of the file on disk
+            BitmapFactory.Options options = new BitmapFactory.Options { InJustDecodeBounds = true };
+            BitmapFactory.DecodeFile(fileName, options);
+
+            // Next we calculate the ratio that we need to resize the image by
+            // in order to fit the requested dimensions.
+            int outHeight = options.OutHeight;
+            int outWidth = options.OutWidth;
+            int inSampleSize = 1;
+
+            if (outHeight > height || outWidth > width)
+            {
+                inSampleSize = outWidth > outHeight
+                                   ? outHeight / height
+                                   : outWidth / width;
+            }
+
+            // Now we will load the image and have BitmapFactory resize it for us.
+            options.InSampleSize = inSampleSize;
+            options.InJustDecodeBounds = false;
+            Bitmap resizedBitmap = BitmapFactory.DecodeFile(fileName, options);
+
+            return resizedBitmap;
+        }
+    }
+
+    public static class App
+    {
+        public static File _file;
+        public static File _dir;
+        public static Bitmap bitmap;
+    }
+      
 }
