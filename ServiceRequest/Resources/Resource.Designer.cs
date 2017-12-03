@@ -147,6 +147,9 @@ namespace DoYourJob
 			// aapt resource value: 0x7f08000d
 			public const int AddServiceButton = 2131230733;
 			
+			// aapt resource value: 0x7f080012
+			public const int AddStaffButton = 2131230738;
+			
 			// aapt resource value: 0x7f08000b
 			public const int CreateStaffButton = 2131230731;
 			
@@ -159,14 +162,17 @@ namespace DoYourJob
 			// aapt resource value: 0x7f080009
 			public const int StaffNameTextView = 2131230729;
 			
-			// aapt resource value: 0x7f080015
-			public const int dateTextDisplay = 2131230741;
+			// aapt resource value: 0x7f080011
+			public const int StaffRecyclerView = 2131230737;
+			
+			// aapt resource value: 0x7f080017
+			public const int dateTextDisplay = 2131230743;
 			
 			// aapt resource value: 0x7f080004
 			public const int dateTextView = 2131230724;
 			
-			// aapt resource value: 0x7f08001a
-			public const int deleteServiceButton = 2131230746;
+			// aapt resource value: 0x7f08001c
+			public const int deleteServiceButton = 2131230748;
 			
 			// aapt resource value: 0x7f080007
 			public const int descriptionEditText = 2131230727;
@@ -174,11 +180,11 @@ namespace DoYourJob
 			// aapt resource value: 0x7f080006
 			public const int descriptionTextView = 2131230726;
 			
-			// aapt resource value: 0x7f080018
-			public const int detailsTextDisplay = 2131230744;
+			// aapt resource value: 0x7f08001a
+			public const int detailsTextDisplay = 2131230746;
 			
-			// aapt resource value: 0x7f080017
-			public const int detailsTextView = 2131230743;
+			// aapt resource value: 0x7f080019
+			public const int detailsTextView = 2131230745;
 			
 			// aapt resource value: 0x7f08000f
 			public const int imageView1 = 2131230735;
@@ -186,8 +192,8 @@ namespace DoYourJob
 			// aapt resource value: 0x7f080003
 			public const int locationEditText = 2131230723;
 			
-			// aapt resource value: 0x7f080016
-			public const int locationTextDisplay = 2131230742;
+			// aapt resource value: 0x7f080018
+			public const int locationTextDisplay = 2131230744;
 			
 			// aapt resource value: 0x7f080002
 			public const int locationTextView = 2131230722;
@@ -195,11 +201,11 @@ namespace DoYourJob
 			// aapt resource value: 0x7f080010
 			public const int myButton = 2131230736;
 			
-			// aapt resource value: 0x7f080014
-			public const int nameTextDisplay = 2131230740;
+			// aapt resource value: 0x7f080016
+			public const int nameTextDisplay = 2131230742;
 			
-			// aapt resource value: 0x7f080013
-			public const int nameTextView = 2131230739;
+			// aapt resource value: 0x7f080015
+			public const int nameTextView = 2131230741;
 			
 			// aapt resource value: 0x7f08000c
 			public const int recyclerView = 2131230732;
@@ -207,26 +213,26 @@ namespace DoYourJob
 			// aapt resource value: 0x7f080005
 			public const int selectDateButton = 2131230725;
 			
-			// aapt resource value: 0x7f080012
-			public const int serviceDateView = 2131230738;
+			// aapt resource value: 0x7f080014
+			public const int serviceDateView = 2131230740;
 			
 			// aapt resource value: 0x7f080001
 			public const int serviceEditText = 2131230721;
 			
-			// aapt resource value: 0x7f080011
-			public const int serviceNameView = 2131230737;
+			// aapt resource value: 0x7f080013
+			public const int serviceNameView = 2131230739;
 			
 			// aapt resource value: 0x7f080000
 			public const int serviceTextView = 2131230720;
 			
-			// aapt resource value: 0x7f080019
-			public const int setReminderButton = 2131230745;
-			
-			// aapt resource value: 0x7f08001c
-			public const int staffLocationView = 2131230748;
-			
 			// aapt resource value: 0x7f08001b
-			public const int staffNameView = 2131230747;
+			public const int setReminderButton = 2131230747;
+			
+			// aapt resource value: 0x7f08001e
+			public const int staffLocationView = 2131230750;
+			
+			// aapt resource value: 0x7f08001d
+			public const int staffNameView = 2131230749;
 			
 			// aapt resource value: 0x7f080008
 			public const int submitButton = 2131230728;
@@ -254,16 +260,19 @@ namespace DoYourJob
 			public const int Main = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int SelectStaff = 2130903043;
+			public const int Photo = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int ServiceCardView = 2130903044;
+			public const int SelectStaff = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int ServiceInfo = 2130903045;
+			public const int ServiceCardView = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int StaffCardView = 2130903046;
+			public const int ServiceInfo = 2130903046;
+			
+			// aapt resource value: 0x7f030007
+			public const int StaffCardView = 2130903047;
 			
 			static Layout()
 			{

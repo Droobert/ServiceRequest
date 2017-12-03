@@ -39,8 +39,12 @@ namespace ServiceRequest
             //Create the table if it does not exist
             //dbHelper.DropStaffTable();
             dbHelper.CreateStaffTable();
-            
-            
+
+            Service randoService = new Service("Poop", "Today", "or tomorrow", "details");
+            serviceCollection = new List<Service>();
+            serviceCollection.Add(randoService);
+            //Toast.MakeText(this, JsonConvert.SerializeObject(serviceCollection), ToastLength.Long);
+
             //check to see if Intent has an extra for my resources
             if (Intent.HasExtra("currentUser"))
             {
@@ -61,6 +65,7 @@ namespace ServiceRequest
             if (currentUser != null)
                 try
                 {
+                    //Toast.MakeText(this, dbHelper.dbConn.ExecuteScalar<string>("SELECT ServicesJson FROM Staff WHERE StaffName = ?", currentUser.StaffName), ToastLength.Long);
                     serviceCollection = dbHelper.GetMyServices(currentUser.StaffName);
                 }
                 catch
