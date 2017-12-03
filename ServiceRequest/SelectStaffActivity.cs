@@ -22,7 +22,7 @@ namespace ServiceRequest
     [Activity(Label = "SelectStaffActivity")]
     public class SelectStaffActivity : Activity
     {
-        Button addStaffButton;
+        //Button addStaffButton;
         Button button;
         ImageView _imageView;
 
