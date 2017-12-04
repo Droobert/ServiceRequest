@@ -57,13 +57,13 @@ namespace ServiceRequest
 
         public void createService()
         {
-            Service c = new Service(FindViewById<EditText>(Resource.Id.serviceEditText).Text, 
+            Service s = new Service(FindViewById<EditText>(Resource.Id.serviceEditText).Text, 
                                 FindViewById<Button>(Resource.Id.selectDateButton).Text,
                                 FindViewById<EditText>(Resource.Id.locationEditText).Text,
                                 FindViewById<EditText>(Resource.Id.descriptionEditText).Text);
 
             var mainActivity = new Intent(this, typeof(MainActivity));
-            mainActivity.PutExtra("NewService", JsonConvert.SerializeObject(c));
+            mainActivity.PutExtra("NewService", JsonConvert.SerializeObject(s));
             StartActivity(mainActivity);
         }
     }

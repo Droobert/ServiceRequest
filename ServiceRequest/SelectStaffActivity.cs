@@ -29,13 +29,14 @@ namespace ServiceRequest
 
             //-----------POPULATE HOUSECOLLECTION FROM DB------
             //Create a dbHelper
-            DBHelper dbHelper = new DBHelper();
+            //DBHelper dbHelper = new DBHelper();
+            HTTPHelper httpHelper = new HTTPHelper();
             //Open connection to DB
-            dbHelper.OpenConn();
+            //dbHelper.OpenConn();
             //Download list of staffs from DB
             //While loop to debug
             while (staffCollection == null)
-                staffCollection = dbHelper.QueryStaffs();
+                staffCollection = httpHelper.QueryStaffs();
 
 
             //-----------SET UP RECYCLERVIEW AND HELPERS------

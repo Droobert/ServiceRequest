@@ -28,10 +28,10 @@ namespace ServiceRequest
             //-----------LOAD SERVICE LIST THROUGH API GATEWAY INTO LAMBDA INTO DYNAMO-----------
             //Create httpHelper
             HTTPHelper httpHelper = new HTTPHelper();
-            var task = httpHelper.QueryStaffs();
+            //var task = httpHelper.QueryStaffs();
             //Toast.MakeText(this, task, ToastLength.Long);
-            currentUser = task[0];
-            serviceCollection = JsonConvert.DeserializeObject<List<Service>>(currentUser.ServicesJson);
+            //currentUser = task[0];
+            //serviceCollection = JsonConvert.DeserializeObject<List<Service>>(currentUser.ServicesJson);
 
             //check to see if Intent has an extra for my resources
             if (Intent.HasExtra("currentUser"))
@@ -58,9 +58,10 @@ namespace ServiceRequest
                 catch
                 {
                     Toast.MakeText(this, "Failed to load services from DB.", ToastLength.Long).Show();
-                    if (serviceCollection == null)
-                        serviceCollection = new List<Service>();
                 }
+
+            if (serviceCollection == null)
+                serviceCollection = new List<Service>();
 
             //-----------UPDATE THE DB AFTER DELETING A CHORE-------
             //check Intent for an updated serviceCollection from DeleteServiceButton in ServiceInfoActivity
