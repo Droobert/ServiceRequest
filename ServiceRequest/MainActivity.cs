@@ -18,42 +18,21 @@ namespace ServiceRequest
         RecyclerView.LayoutManager serviceLayoutManager;
         ServiceAdapter serviceAdapter;
 
-        public static List<Service> serviceCollection; //Replaced ServiceCollection type with List<Service>
+        public static List<Service> serviceCollection;
         public static Staff currentUser;
 
-        //IOHelper ioHelper;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             
-            //-----------LOAD SERVICE LIST FROM DB-----------
-            //Get the dbPath
-            var dbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-            dbPath = Path.Combine(dbPath, "service-request.db3");
-
-            //SQLiteDatabase mydatabase = OpenOrCreateDatabase(dbPath, FileCreationMode.Private, null);
-            ////Create dbHelper
-            //DBHelper dbHelper = new DBHelper();
-            ////Open dbConnection
-            //dbHelper.OpenConn();
-            ////Create the table if it does not exist
-            ////dbHelper.DropStaffTable();
-            //dbHelper.CreateStaffTable();
-
+            //-----------LOAD SERVICE LIST THROUGH API GATEWAY INTO LAMBDA INTO DYNAMO-----------
+            //Create httpHelper
             HTTPHelper httpHelper = new HTTPHelper();
             var task = httpHelper.RefreshDataAsync();
-            //string result = task.Result;
             Toast.MakeText(this, task, ToastLength.Long);
             Staff exampleKerry = JsonConvert.DeserializeObject<Staff>(task);
-            //List<Staff> staffCollection = new List<Staff>();
             currentUser = exampleKerry;
-            //serviceCollection = new List<Service>();
             serviceCollection = JsonConvert.DeserializeObject<List<Service>>(exampleKerry.ServicesJson);
-            
-            //Service randoService = new Service("Poop", "Today", "or tomorrow", "details");
-            //serviceCollection = new List<Service>();
-            //serviceCollection.Add(randoService);
-            //Toast.MakeText(this, JsonConvert.SerializeObject(serviceCollection), ToastLength.Long);
 
             //check to see if Intent has an extra for my resources
             if (Intent.HasExtra("currentUser"))
@@ -75,7 +54,6 @@ namespace ServiceRequest
             if (currentUser != null)
                 try
                 {
-                    //Toast.MakeText(this, dbHelper.dbConn.ExecuteScalar<string>("SELECT ServicesJson FROM Staff WHERE StaffName = ?", currentUser.StaffName), ToastLength.Long);
                     //serviceCollection = dbHelper.GetMyServices(currentUser.StaffName);
                 }
                 catch
@@ -89,24 +67,9 @@ namespace ServiceRequest
             //check Intent for an updated serviceCollection from DeleteServiceButton in ServiceInfoActivity
             if (Intent.HasExtra("shortenedServiceList"))
             {
-                //DONE: The DB stuff should be done here instead of in the ServiceInfoActivity
                 serviceCollection = JsonConvert.DeserializeObject<List<Service>>(Intent.GetStringExtra("shortenedServiceList"));
                 //dbHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
             }
-
-
-            //-----------ADD NEW CHORE TO FILE-------
-            ////Add a new element from our AddServiceActivity to the file
-            //if (Intent.HasExtra("NewService"))
-            //{
-            //    serviceCollection.Add(JsonConvert.DeserializeObject<Service>(Intent.GetStringExtra("NewService")));
-
-            //    using (var streamWriter = new StreamWriter(filename, false))
-            //    {
-            //        streamWriter.Write(JsonConvert.SerializeObject(serviceCollection));
-            //    }
-            //    //ioHelper.WriteToJsonFile<List<Service>>(this, serviceCollection);
-            //}
 
             //-----------ADD NEW CHORE TO DB-------
             if (Intent.HasExtra("NewService"))
