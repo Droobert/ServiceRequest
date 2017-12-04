@@ -40,12 +40,10 @@ namespace DoYourJob
 
         public void AddStaff(Staff staff)
         {
-            var parms = new Dictionary<string, string>();
-            parms.Add("name", staff.StaffName);
-            parms.Add("ServicesJson", staff.ServicesJson);
-
-            var uri = new Uri(BaseUrl);
-            var response = client.PostAsync(uri, new FormUrlEncodedContent(parms)).Result;
+            var endpoint = BaseUrl + "?name=" + staff.StaffName + "&ServicesJson=" + staff.ServicesJson;
+            var uri = new Uri(endpoint);
+            var response = client.GetAsync(uri).Result;
+            var result = response.Content.ReadAsStringAsync().Result;
            
         }
 
