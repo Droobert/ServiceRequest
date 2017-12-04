@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using SQLite;
 
 namespace ServiceRequest
@@ -19,6 +20,7 @@ namespace ServiceRequest
         //public int ID { get; set; }
 
         [PrimaryKey]
+        [JsonProperty("name")]
         public string StaffName { get; set; }
 
         public string ServicesJson { get; set; }
