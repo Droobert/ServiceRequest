@@ -31,18 +31,28 @@ namespace ServiceRequest
             var dbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             dbPath = Path.Combine(dbPath, "service-request.db3");
 
-            SQLiteDatabase mydatabase = OpenOrCreateDatabase(dbPath, FileCreationMode.Private, null);
-            //Create dbHelper
-            DBHelper dbHelper = new DBHelper();
-            //Open dbConnection
-            dbHelper.OpenConn();
-            //Create the table if it does not exist
-            //dbHelper.DropStaffTable();
-            dbHelper.CreateStaffTable();
+            //SQLiteDatabase mydatabase = OpenOrCreateDatabase(dbPath, FileCreationMode.Private, null);
+            ////Create dbHelper
+            //DBHelper dbHelper = new DBHelper();
+            ////Open dbConnection
+            //dbHelper.OpenConn();
+            ////Create the table if it does not exist
+            ////dbHelper.DropStaffTable();
+            //dbHelper.CreateStaffTable();
 
-            Service randoService = new Service("Poop", "Today", "or tomorrow", "details");
-            serviceCollection = new List<Service>();
-            serviceCollection.Add(randoService);
+            HTTPHelper httpHelper = new HTTPHelper();
+            var task = httpHelper.RefreshDataAsync();
+            //string result = task.Result;
+            Toast.MakeText(this, task, ToastLength.Long);
+            Staff exampleKerry = JsonConvert.DeserializeObject<Staff>(task);
+            //List<Staff> staffCollection = new List<Staff>();
+            currentUser = exampleKerry;
+            //serviceCollection = new List<Service>();
+            serviceCollection = JsonConvert.DeserializeObject<List<Service>>(exampleKerry.ServicesJson);
+            
+            //Service randoService = new Service("Poop", "Today", "or tomorrow", "details");
+            //serviceCollection = new List<Service>();
+            //serviceCollection.Add(randoService);
             //Toast.MakeText(this, JsonConvert.SerializeObject(serviceCollection), ToastLength.Long);
 
             //check to see if Intent has an extra for my resources
@@ -50,7 +60,7 @@ namespace ServiceRequest
             {
                 currentUser = JsonConvert.DeserializeObject<Staff>(Intent.GetStringExtra("currentUser"));
                 //Update DB by adding Staff to the table, replacing the previous version if it exists
-                dbHelper.AddStaff(currentUser);
+                //dbHelper.AddStaff(currentUser);
             }
             //else if(I don't have a staff)
             if(currentUser == null)
@@ -66,7 +76,7 @@ namespace ServiceRequest
                 try
                 {
                     //Toast.MakeText(this, dbHelper.dbConn.ExecuteScalar<string>("SELECT ServicesJson FROM Staff WHERE StaffName = ?", currentUser.StaffName), ToastLength.Long);
-                    serviceCollection = dbHelper.GetMyServices(currentUser.StaffName);
+                    //serviceCollection = dbHelper.GetMyServices(currentUser.StaffName);
                 }
                 catch
                 {
@@ -81,7 +91,7 @@ namespace ServiceRequest
             {
                 //DONE: The DB stuff should be done here instead of in the ServiceInfoActivity
                 serviceCollection = JsonConvert.DeserializeObject<List<Service>>(Intent.GetStringExtra("shortenedServiceList"));
-                dbHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
+                //dbHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
             }
 
 
@@ -103,7 +113,7 @@ namespace ServiceRequest
             {
                 serviceCollection.Add(JsonConvert.DeserializeObject<Service>(Intent.GetStringExtra("NewService")));
                 //Update DB by adding Staff to the table, replacing the previous version if it exists
-                dbHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
+                //dbHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
             }
 
             //-----------SET UP RECYCLERVIEW AND HELPERS------

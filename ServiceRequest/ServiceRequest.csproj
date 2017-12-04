@@ -104,6 +104,7 @@
     <Compile Include="AddServiceActivity.cs" />
     <Compile Include="AddStaffActivity.cs" />
     <Compile Include="AlarmReceiver.cs" />
+    <Compile Include="HTTPHelper.cs" />
     <Compile Include="SelectStaffActivity.cs" />
     <Compile Include="UploadObjectUsingPresignedURL.cs" />
     <Compile Include="Service.cs" />
