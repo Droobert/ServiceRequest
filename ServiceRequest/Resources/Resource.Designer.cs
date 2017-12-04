@@ -228,9 +228,6 @@ namespace DoYourJob
 			// aapt resource value: 0x7f08001b
 			public const int setReminderButton = 2131230747;
 			
-			// aapt resource value: 0x7f08001e
-			public const int staffLocationView = 2131230750;
-			
 			// aapt resource value: 0x7f08001d
 			public const int staffNameView = 2131230749;
 			

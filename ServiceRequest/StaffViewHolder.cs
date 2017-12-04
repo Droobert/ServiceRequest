@@ -28,7 +28,7 @@ namespace ServiceRequest
             //Image = itemView.FindViewById<ImageView>(Resource.Id.imageView);
             //Caption = itemView.FindViewById<TextView>(Resource.Id.textView);
             StaffName = itemView.FindViewById<TextView>(Resource.Id.staffNameView);
-            Location = itemView.FindViewById<TextView>(Resource.Id.staffLocationView);
+            //Location = itemView.FindViewById<TextView>(Resource.Id.staffLocationView);
 
             itemView.Click += (sender, e) => listener(Position);
         }
