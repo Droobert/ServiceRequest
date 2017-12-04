@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Widget;
 using Android.OS;
 using Android.Content;
@@ -28,18 +28,17 @@ namespace ServiceRequest
             //-----------LOAD SERVICE LIST THROUGH API GATEWAY INTO LAMBDA INTO DYNAMO-----------
             //Create httpHelper
             HTTPHelper httpHelper = new HTTPHelper();
-            var task = httpHelper.RefreshDataAsync();
-            Toast.MakeText(this, task, ToastLength.Long);
-            Staff exampleKerry = JsonConvert.DeserializeObject<Staff>(task);
-            currentUser = exampleKerry;
-            serviceCollection = JsonConvert.DeserializeObject<List<Service>>(exampleKerry.ServicesJson);
+            var task = httpHelper.QueryStaffs();
+            //Toast.MakeText(this, task, ToastLength.Long);
+            currentUser = task[0];
+            serviceCollection = JsonConvert.DeserializeObject<List<Service>>(currentUser.ServicesJson);
 
             //check to see if Intent has an extra for my resources
             if (Intent.HasExtra("currentUser"))
             {
                 currentUser = JsonConvert.DeserializeObject<Staff>(Intent.GetStringExtra("currentUser"));
                 //Update DB by adding Staff to the table, replacing the previous version if it exists
-                //dbHelper.AddStaff(currentUser);
+                httpHelper.AddStaff(currentUser);
             }
             //else if(I don't have a staff)
             if(currentUser == null)
@@ -54,7 +53,7 @@ namespace ServiceRequest
             if (currentUser != null)
                 try
                 {
-                    //serviceCollection = dbHelper.GetMyServices(currentUser.StaffName);
+                serviceCollection = httpHelper.GetMyServices(currentUser.StaffName);
                 }
                 catch
                 {
@@ -68,7 +67,7 @@ namespace ServiceRequest
             if (Intent.HasExtra("shortenedServiceList"))
             {
                 serviceCollection = JsonConvert.DeserializeObject<List<Service>>(Intent.GetStringExtra("shortenedServiceList"));
-                //dbHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
+                httpHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
             }
 
             //-----------ADD NEW CHORE TO DB-------
@@ -76,7 +75,7 @@ namespace ServiceRequest
             {
                 serviceCollection.Add(JsonConvert.DeserializeObject<Service>(Intent.GetStringExtra("NewService")));
                 //Update DB by adding Staff to the table, replacing the previous version if it exists
-                //dbHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
+                httpHelper.AddStaff(currentUser.StaffName, JsonConvert.SerializeObject(serviceCollection));
             }
 
             //-----------SET UP RECYCLERVIEW AND HELPERS------
