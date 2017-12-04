@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,13 +12,14 @@ using Android.Widget;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ServiceRequest;
 
 namespace DoYourJob
 {
     class HTTPHelper
     {
         HttpClient client;
-        string RestUrl = "https://5w3bsgqwxg.execute-api.us-east-1.amazonaws.com/prod/rekog";
+        string BaseUrl = "https://5w3bsgqwxg.execute-api.us-east-1.amazonaws.com/prod/rekog";
 
         public HTTPHelper()
         {
@@ -30,10 +31,47 @@ namespace DoYourJob
         //Query DB for one Staff
         public string RefreshDataAsync()
         {
-            var uri = new Uri(string.Format(RestUrl, string.Empty));
+            var uri = new Uri(string.Format(BaseUrl, string.Empty));
             var response = client.GetAsync(uri).Result;
             if (response.IsSuccessStatusCode)
                 return response.Content.ReadAsStringAsync().Result;
+            return null;
+        }
+
+        public void AddStaff(Staff staff)
+        {
+            var parms = new Dictionary<string, string>();
+            parms.Add("name", staff.StaffName);
+            parms.Add("ServicesJson", staff.ServicesJson);
+
+            var uri = new Uri(BaseUrl);
+            var response = client.PostAsync(uri, new FormUrlEncodedContent(parms)).Result;
+           
+        }
+
+        public void AddStaff(string name, string requests)
+        {
+            Staff staff = new Staff(name, requests);
+            AddStaff(staff);
+        }
+
+
+        public List<Staff> QueryStaffs()
+        {
+            var uri = new Uri(string.Format(BaseUrl, string.Empty));
+            var response = client.GetAsync(uri).Result;
+            var text = response.Content.ReadAsStringAsync().Result;
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<Staff>>(text);
+            return null;
+        }
+
+        public List<ServiceRequest.Service> GetMyServices(string staffName)
+        {
+            var uri = new Uri(BaseUrl + "?name=" + staffName);
+            var response = client.GetAsync(uri).Result;
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<List<ServiceRequest.Service>>(response.Content.ReadAsStringAsync().Result);
             return null;
         }
     }
